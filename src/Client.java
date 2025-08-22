@@ -3,6 +3,9 @@ public class Client {
 
     }
 }
+//client -> controller ->service -> repository
+
+
 // Entry of vehicle from any entry gate
 // Operator - . gives ticket(ticket controller) / Floor controller
 // based on available slot on any floor using slotallocation stratagey

@@ -8,18 +8,32 @@ import models.Ticket;
 import services.TicketService;
 
 public class TicketController {
-
+    // controller will only receive request DTO and will only return response DTO
     private TicketService ticketService;
 
     public TicketController(TicketService ticketService){
         this.ticketService = ticketService;
     }
+
     IssueTicketResponseDTO issueTicket(IssueTicketRequestDTO requestDTO){
         IssueTicketResponseDTO response = new IssueTicketResponseDTO();
-        Ticket ticket = ticketService.issueTicket(requestDTO.getGateId() , requestDTO.getVehicleNumber());
-        response.setTicketId(ticket.getId());
-        response.setResponseStatus(ResponseStatus.SUCCESS);
-        return null;
+
+        //request dto object can have a lot of other details as well
+        //so we don't send the entire object internally to issueTicket method
+        try {
+            Ticket ticket = ticketService.issueTicket(requestDTO.getGateId(),
+                    requestDTO.getVehicleNumber(),
+                    requestDTO.getVehicleType(),
+                    requestDTO.getOwnerName()
+            );
+
+            response.setTicket(ticket);
+            response.setResponseStatus(ResponseStatus.SUCCESS);
+        } catch (Exception ex){
+            response.setResponseStatus(ResponseStatus.FAILURE);
+            response.setFailureMessage(ex.getMessage());
+        }
+        return response;
     }
 }
 
